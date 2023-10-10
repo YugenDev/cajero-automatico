@@ -150,7 +150,8 @@ button {
       rgba(0, 0, 0, 1) 100%
     ),
     url(/assets/img/H0kNFJ.webp);
-  background-size: 100%;
+    background-size: cover;
+    background-size: 100%;
 }
 
 .service-card {
