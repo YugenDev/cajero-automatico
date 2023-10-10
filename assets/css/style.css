@@ -119,9 +119,14 @@ button {
   text-decoration: underline;
 }
 
+.sign-up:hover {
+  cursor: pointer;
+}
+
 .log-in:hover {
   box-shadow: 2px 2px 8px var(--contrast_color);
   transform: scale(1.1);
+  cursor: pointer;
 }
 
 .main-content {
