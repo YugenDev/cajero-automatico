@@ -12,98 +12,92 @@ document.addEventListener("DOMContentLoaded", function () {
   const signUpForm = document.querySelector("#signUpForm");
   const signUpToLogIn = document.querySelector("#signUp-to-logIn");
   const logInToSignUp = document.querySelector("#logIn-to-signUp");
-  
-  
-  // Función para abrir el modal de registro
+
   function abrirModalAcceder() {
-      modalSignUp.classList.add("modal-not-show");
-      modalSignUp.classList.remove("modal-show");
-      modalLogIn.classList.add("modal-show");
-      modalLogIn.classList.remove("modal-not-show");
-      modalTitle.textContent = "INICIAR SESIÓN";
-      modalBg.classList.add("modal-show");
+    modalSignUp.classList.add("modal-not-show");
+    modalSignUp.classList.remove("modal-show");
+    modalLogIn.classList.add("modal-show");
+    modalLogIn.classList.remove("modal-not-show");
+    modalTitle.textContent = "INICIAR SESIÓN";
+    modalBg.classList.add("modal-show");
   }
 
-  // Función para abrir el modal de registro
   function abrirModalRegistro() {
-      modalSignUp.classList.add("modal-show");
-      modalSignUp.classList.remove("modal-not-show");
-      modalLogIn.classList.add("modal-not-show");
-      modalLogIn.classList.remove("modal-show");
-      modalTitle.textContent = "CREAR CUENTA";
-      modalBg.classList.add("modal-show");
+    modalSignUp.classList.add("modal-show");
+    modalSignUp.classList.remove("modal-not-show");
+    modalLogIn.classList.add("modal-not-show");
+    modalLogIn.classList.remove("modal-show");
+    modalTitle.textContent = "CREAR CUENTA";
+    modalBg.classList.add("modal-show");
   }
 
-  
-
-  // Función para cerrar el modal de registro
   function cerrarModalRegistro() {
-      modalSignUp.classList.remove("modal-show");
-      modalBg.classList.remove("modal-show");
-      modalBg.classList.add("modal-not-show");
-      // Restablecer los valores del formulario si es necesario
-      signUpForm.reset();
+    modalSignUp.classList.remove("modal-show");
+    modalBg.classList.remove("modal-show");
+    modalBg.classList.add("modal-not-show");
+    signUpForm.reset();
   }
 
-  // Función para manejar el envío del formulario de registro
-  function crearCuenta() {
-      const usuarioInput = signUpForm.querySelector('input[placeholder="Usuario"]');
-      const saldoInicialInput = signUpForm.querySelector('input[placeholder="Saldo inicial"]');
-      const contraseñaInput = signUpForm.querySelector('input[placeholder="Contraseña nueva"]');
-      const confirmacionContraseñaInput = signUpForm.querySelector('input[placeholder="Confirmar contraseña"]');
+  function crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña) {
+    if (saldoInicial < 100000) {
+      alert("Saldo inicial debe ser de al menos $100,000");
+      return "Saldo inicial debe ser de al menos $100,000";
+    }
 
-      const usuario = usuarioInput.value;
-      const saldoInicial = parseFloat(saldoInicialInput.value);
-      const contraseña = contraseñaInput.value;
-      const confirmacionContraseña = confirmacionContraseñaInput.value;
+    if (contraseña !== confirmacionContraseña) {
+      alert("La confirmación de contraseña no coincide.");
+      return "La confirmación de contraseña no coincide.";
+    }
 
-      if (saldoInicial < 100000) {
-          alert("Saldo inicial debe ser de al menos $100,000");
-          return;
-      }
+    const nuevaCuenta = {
+      nombre: usuario,
+      saldo: saldoInicial,
+      contraseña: contraseña,
+      historial: [],
+    };
 
-      if (contraseña !== confirmacionContraseña) {
-          alert("La confirmación de contraseña no coincide.");
-          return;
-      }
-
-      const mensaje = crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña);
-
-      if (mensaje === "Cuenta creada exitosamente.") {
-          alert(mensaje);
-          cerrarModalRegistro(); // Cerrar el modal después de crear la cuenta
-      } else {
-          alert(mensaje);
-      }
+    cuentas.push(nuevaCuenta);
+    console.log(cuentas); // Mostrar cuentas actualizadas en la consola
+    return "Cuenta creada exitosamente.";
   }
 
-  // Agregar evento de clic para abrir el modal de registro
   signUpButton.addEventListener("click", abrirModalRegistro);
 
-  // Agregar evento de clic para cerrar el modal de registro
   modalBg.addEventListener("click", function (e) {
-      if (e.target === modalBg) {
-          cerrarModalRegistro();
-      }
+    if (e.target === modalBg) {
+      cerrarModalRegistro();
+    }
   });
 
-  // Agregar evento de clic para cambiar entre formularios
   logInToSignUp.addEventListener("click", abrirModalRegistro);
   signUpToLogIn.addEventListener("click", abrirModalAcceder);
-  
   logInButton.addEventListener("click", abrirModalAcceder);
   
-  
+  const signUp = document.querySelector(".singUpForm");
 
-
-  // Agregar evento de clic para procesar el formulario de registro
   signUpForm.addEventListener("submit", function (e) {
-      e.preventDefault(); // Evitar que el formulario se envíe por defecto
-     crearCuenta(); // Llamar a la función para procesar el registro
+    e.preventDefault();
+    console.log("formulario enviado")
+    const usuarioInput = signUpForm.querySelector('input[placeholder="Usuario"]');
+    const saldoInicialInput = signUpForm.querySelector('input[placeholder="Saldo inicial"]');
+    const contraseñaInput = signUpForm.querySelector('input[placeholder="Contraseña nueva"]');
+    const confirmacionContraseñaInput = signUpForm.querySelector('input[placeholder="Confirmar contraseña"]');
+
+    const usuario = usuarioInput.value;
+    const saldoInicial = parseFloat(saldoInicialInput.value);
+    const contraseña = contraseñaInput.value;
+    const confirmacionContraseña = confirmacionContraseñaInput.value;
+
+    const mensaje = crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña);
+
+    if (mensaje === "Cuenta creada exitosamente.") {
+      alert(mensaje);
+      cerrarModalRegistro();
+    } else {
+      alert(mensaje);
+    }
+
   });
-
-
-
 });
 
 
