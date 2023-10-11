@@ -4,20 +4,43 @@ const cuentas = [];
 // Función para crear una nueva cuenta bancaria
 document.addEventListener("DOMContentLoaded", function () {
   const signUpButton = document.querySelector(".sign-up");
+  const logInButton = document.querySelector(".log-in");
   const modalSignUp = document.querySelector(".modal-signUp");
+  const modalLogIn = document.querySelector(".modal-logIn");
+  const modalTitle = document.querySelector(".modal-title");
   const modalBg = document.querySelector(".modal-bg");
   const signUpForm = document.querySelector("#signUpForm");
+  const signUpToLogIn = document.querySelector("#signUp-to-logIn");
+  const logInToSignUp = document.querySelector("#logIn-to-signUp");
+  
+  
+  // Función para abrir el modal de registro
+  function abrirModalAcceder() {
+      modalSignUp.classList.add("modal-not-show");
+      modalSignUp.classList.remove("modal-show");
+      modalLogIn.classList.add("modal-show");
+      modalLogIn.classList.remove("modal-not-show");
+      modalTitle.textContent = "INICIAR SESIÓN";
+      modalBg.classList.add("modal-show");
+  }
 
   // Función para abrir el modal de registro
   function abrirModalRegistro() {
       modalSignUp.classList.add("modal-show");
+      modalSignUp.classList.remove("modal-not-show");
+      modalLogIn.classList.add("modal-not-show");
+      modalLogIn.classList.remove("modal-show");
+      modalTitle.textContent = "CREAR CUENTA";
       modalBg.classList.add("modal-show");
   }
+
+  
 
   // Función para cerrar el modal de registro
   function cerrarModalRegistro() {
       modalSignUp.classList.remove("modal-show");
       modalBg.classList.remove("modal-show");
+      modalBg.classList.add("modal-not-show");
       // Restablecer los valores del formulario si es necesario
       signUpForm.reset();
   }
@@ -64,11 +87,23 @@ document.addEventListener("DOMContentLoaded", function () {
       }
   });
 
+  // Agregar evento de clic para cambiar entre formularios
+  logInToSignUp.addEventListener("click", abrirModalRegistro);
+  signUpToLogIn.addEventListener("click", abrirModalAcceder);
+  
+  logInButton.addEventListener("click", abrirModalAcceder);
+  
+  
+
+
   // Agregar evento de clic para procesar el formulario de registro
   signUpForm.addEventListener("submit", function (e) {
       e.preventDefault(); // Evitar que el formulario se envíe por defecto
      crearCuenta(); // Llamar a la función para procesar el registro
   });
+
+
+
 });
 
 

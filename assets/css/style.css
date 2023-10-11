@@ -267,7 +267,6 @@ button {
   background-color: var(--main_color);
   height: 3vw;
   width: 40%;
-  margin: 0vw 4vw;
 }
 
 .modal-signUp {
@@ -275,4 +274,22 @@ button {
 }
 .modal-logIn {
   align-items: flex-start;
+}
+.submit-form-div {
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0vw 4vw;
+
+}
+
+.submit-form-div p {
+  color: var(--main_color);
+  text-decoration: underline;
+}
+
+.submit-form-div p:hover, button{
+  cursor: pointer;
 }
