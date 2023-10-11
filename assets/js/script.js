@@ -8,26 +8,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const modalBg = document.querySelector(".modal-bg");
   const signUpForm = document.querySelector("#signUpForm");
 
-  // Función para mostrar el modal de registro
-  signUpButton.addEventListener("click", function () {
+  // Función para abrir el modal de registro
+  function abrirModalRegistro() {
       modalSignUp.classList.add("modal-show");
       modalBg.classList.add("modal-show");
-  });
+  }
 
-  // Función para cerrar el modal cuando se hace clic fuera de él
-  modalBg.addEventListener("click", function (e) {
-      if (e.target === modalBg) {
-          modalSignUp.classList.remove("modal-show");
-          modalBg.classList.remove("modal-show");
-          // Restablecer los valores del formulario si es necesario
-          signUpForm.reset();
-      }
-  });
+  // Función para cerrar el modal de registro
+  function cerrarModalRegistro() {
+      modalSignUp.classList.remove("modal-show");
+      modalBg.classList.remove("modal-show");
+      // Restablecer los valores del formulario si es necesario
+      signUpForm.reset();
+  }
 
-  // Manejar el envío del formulario de registro
-  signUpForm.addEventListener("submit", function (e) {
-      e.preventDefault(); // Evita que el formulario se envíe por defecto
-
+  // Función para manejar el envío del formulario de registro
+  function crearCuenta() {
       const usuarioInput = signUpForm.querySelector('input[placeholder="Usuario"]');
       const saldoInicialInput = signUpForm.querySelector('input[placeholder="Saldo inicial"]');
       const contraseñaInput = signUpForm.querySelector('input[placeholder="Contraseña nueva"]');
@@ -52,13 +48,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (mensaje === "Cuenta creada exitosamente.") {
           alert(mensaje);
-          modalSignUp.classList.remove("modal-show");
-          modalBg.classList.remove("modal-show");
-          // Restablecer los valores del formulario si es necesario
-          signUpForm.reset();
+          cerrarModalRegistro(); // Cerrar el modal después de crear la cuenta
       } else {
           alert(mensaje);
       }
+  }
+
+  // Agregar evento de clic para abrir el modal de registro
+  signUpButton.addEventListener("click", abrirModalRegistro);
+
+  // Agregar evento de clic para cerrar el modal de registro
+  modalBg.addEventListener("click", function (e) {
+      if (e.target === modalBg) {
+          cerrarModalRegistro();
+      }
+  });
+
+  // Agregar evento de clic para procesar el formulario de registro
+  signUpForm.addEventListener("submit", function (e) {
+      e.preventDefault(); // Evitar que el formulario se envíe por defecto
+     crearCuenta(); // Llamar a la función para procesar el registro
   });
 });
 
