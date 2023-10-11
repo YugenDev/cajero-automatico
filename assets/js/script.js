@@ -2,24 +2,66 @@
 const cuentas = [];
 
 // Función para crear una nueva cuenta bancaria
-function crearCuenta(nombre, saldoInicial, contraseña, confirmacionContraseña) {
-  if (saldoInicial >= 100000) {
-    if (contraseña === confirmacionContraseña) {
-      const cuenta = {
-        nombre,
-        saldo: saldoInicial,
-        historial: [],
-        contraseña,
-      };
-      cuentas.push(cuenta);
-      return "Cuenta creada exitosamente.";
-    } else {
-      return "La confirmación de contraseña no coincide.";
-    }
-  } else {
-    return "Saldo inicial debe ser de al menos $100,000";
-  }
-}
+document.addEventListener("DOMContentLoaded", function () {
+  const signUpButton = document.querySelector(".sign-up");
+  const modalSignUp = document.querySelector(".modal-signUp");
+  const modalBg = document.querySelector(".modal-bg");
+  const signUpForm = document.querySelector("#signUpForm");
+
+  // Función para mostrar el modal de registro
+  signUpButton.addEventListener("click", function () {
+      modalSignUp.classList.add("modal-show");
+      modalBg.classList.add("modal-show");
+  });
+
+  // Función para cerrar el modal cuando se hace clic fuera de él
+  modalBg.addEventListener("click", function (e) {
+      if (e.target === modalBg) {
+          modalSignUp.classList.remove("modal-show");
+          modalBg.classList.remove("modal-show");
+          // Restablecer los valores del formulario si es necesario
+          signUpForm.reset();
+      }
+  });
+
+  // Manejar el envío del formulario de registro
+  signUpForm.addEventListener("submit", function (e) {
+      e.preventDefault(); // Evita que el formulario se envíe por defecto
+
+      const usuarioInput = signUpForm.querySelector('input[placeholder="Usuario"]');
+      const saldoInicialInput = signUpForm.querySelector('input[placeholder="Saldo inicial"]');
+      const contraseñaInput = signUpForm.querySelector('input[placeholder="Contraseña nueva"]');
+      const confirmacionContraseñaInput = signUpForm.querySelector('input[placeholder="Confirmar contraseña"]');
+
+      const usuario = usuarioInput.value;
+      const saldoInicial = parseFloat(saldoInicialInput.value);
+      const contraseña = contraseñaInput.value;
+      const confirmacionContraseña = confirmacionContraseñaInput.value;
+
+      if (saldoInicial < 100000) {
+          alert("Saldo inicial debe ser de al menos $100,000");
+          return;
+      }
+
+      if (contraseña !== confirmacionContraseña) {
+          alert("La confirmación de contraseña no coincide.");
+          return;
+      }
+
+      const mensaje = crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña);
+
+      if (mensaje === "Cuenta creada exitosamente.") {
+          alert(mensaje);
+          modalSignUp.classList.remove("modal-show");
+          modalBg.classList.remove("modal-show");
+          // Restablecer los valores del formulario si es necesario
+          signUpForm.reset();
+      } else {
+          alert(mensaje);
+      }
+  });
+});
+
 
 
 // Función para realizar una consulta de saldo
