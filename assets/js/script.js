@@ -2,6 +2,29 @@
 const cuentas = [];
 
 // Función para crear una nueva cuenta bancaria
+function crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña) {
+  if (saldoInicial < 100000) {
+    alert("Saldo inicial debe ser de al menos $100,000");
+    return "Saldo inicial debe ser de al menos $100,000";
+  }
+
+  if (contraseña !== confirmacionContraseña) {
+    alert("La confirmación de contraseña no coincide.");
+    return "La confirmación de contraseña no coincide.";
+  }
+
+  const nuevaCuenta = {
+    nombre: usuario,
+    saldo: saldoInicial,
+    contraseña: contraseña,
+    historial: [],
+  };
+
+  cuentas.push(nuevaCuenta);
+  console.log(cuentas);
+  return "Cuenta creada exitosamente.";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const signUpButton = document.querySelector(".sign-up");
   const logInButton = document.querySelector(".log-in");
@@ -38,29 +61,6 @@ document.addEventListener("DOMContentLoaded", function () {
     signUpForm.reset();
   }
 
-  function crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña) {
-    if (saldoInicial < 100000) {
-      alert("Saldo inicial debe ser de al menos $100,000");
-      return "Saldo inicial debe ser de al menos $100,000";
-    }
-
-    if (contraseña !== confirmacionContraseña) {
-      alert("La confirmación de contraseña no coincide.");
-      return "La confirmación de contraseña no coincide.";
-    }
-
-    const nuevaCuenta = {
-      nombre: usuario,
-      saldo: saldoInicial,
-      contraseña: contraseña,
-      historial: [],
-    };
-
-    cuentas.push(nuevaCuenta);
-    console.log(cuentas); // Mostrar cuentas actualizadas en la consola
-    return "Cuenta creada exitosamente.";
-  }
-
   signUpButton.addEventListener("click", abrirModalRegistro);
 
   modalBg.addEventListener("click", function (e) {
@@ -72,23 +72,18 @@ document.addEventListener("DOMContentLoaded", function () {
   logInToSignUp.addEventListener("click", abrirModalRegistro);
   signUpToLogIn.addEventListener("click", abrirModalAcceder);
   logInButton.addEventListener("click", abrirModalAcceder);
-  
-  const signUp = document.querySelector(".singUpForm");
 
   signUpForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    console.log("formulario enviado")
-    const usuarioInput = signUpForm.querySelector('input[placeholder="Usuario"]');
-    const saldoInicialInput = signUpForm.querySelector('input[placeholder="Saldo inicial"]');
-    const contraseñaInput = signUpForm.querySelector('input[placeholder="Contraseña nueva"]');
-    const confirmacionContraseñaInput = signUpForm.querySelector('input[placeholder="Confirmar contraseña"]');
+    console.log("formulario enviado");
 
-    const usuario = usuarioInput.value;
-    const saldoInicial = parseFloat(saldoInicialInput.value);
-    const contraseña = contraseñaInput.value;
-    const confirmacionContraseña = confirmacionContraseñaInput.value;
+    const usuarioInput = signUpForm.querySelector('input[name="Usuario"]').value;
+    const saldoInicialInput = parseFloat(signUpForm.querySelector('input[name="Saldo inicial"]').value);
+    const contraseñaInput = signUpForm.querySelector('input[name="Contraseña nueva"]').value;
+    const confirmacionContraseñaInput = signUpForm.querySelector('input[name="Confirmar contraseña"]').value;
 
-    const mensaje = crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña);
+
+    const mensaje = crearCuenta(usuarioInput, saldoInicialInput, contraseñaInput, confirmacionContraseñaInput);
 
     if (mensaje === "Cuenta creada exitosamente.") {
       alert(mensaje);
@@ -96,11 +91,42 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       alert(mensaje);
     }
-
   });
 });
 
+// Función para iniciar sesión
 
+let intentosFallidos = 0;
+
+function iniciarSesion(usuario, contraseña) {
+
+  const cuenta = cuentas.find((c) => c.usuario === usuario);
+
+  console.log("Cuenta encontrada:", cuenta);
+
+  if (!cuenta) {
+    return "Cuenta no encontrada";
+  }
+
+  if (cuenta.contraseña !== contraseña) {
+    intentosFallidos++;
+
+    if (intentosFallidos >= 3) {
+      bloquearFormularioAcceso();
+      return "Número máximo de intentos alcanzado. Formulario bloqueado.";
+    }
+
+    return `Contraseña incorrecta. Intentos restantes: ${3 - intentosFallidos}`;
+  }
+
+  intentosFallidos = 0; // Restablece los intentos fallidos si la contraseña es correcta
+
+  return cuenta;
+}
+
+function bloquearFormularioAcceso() {
+  // aqui luego definimos como vamos a hacer el bloqueo del formulario 
+}
 
 // Función para realizar una consulta de saldo
 function consultarSaldo(cuenta) {
@@ -153,35 +179,7 @@ function registrarTransaccion(cuenta, descripcion) {
   cuenta.historial.push({ fecha, descripcion });
 }
 
-// Función para iniciar sesión
-let intentosFallidos = 0; 
 
-function iniciarSesion(nombre, contraseña) {
-  const cuenta = cuentas.find((c) => c.nombre === nombre);
-
-  if (!cuenta) {
-    return "Cuenta no encontrada";
-  }
-
-  if (cuenta.contraseña !== contraseña) {
-    intentosFallidos++;
-
-    if (intentosFallidos >= 3) {
-      bloquearFormularioAcceso(); 
-      return "Número máximo de intentos alcanzado. Formulario bloqueado.";
-    }
-
-    return `Contraseña incorrecta. Intentos restantes: ${3 - intentosFallidos}`;
-  }
-
-  intentosFallidos = 0; // Restablece los intentos fallidos si la contraseña es correcta
-
-  return cuenta;
-}
-
-function bloquearFormularioAcceso() {
-  // aqui luego definimos como vamos a hacer el bloqueo del formulario 
-}
 
 
 // // Ejemplo de uso
