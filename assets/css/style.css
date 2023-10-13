@@ -9,9 +9,8 @@
   box-sizing: border-box;
   font-weight: 300;
 }
-
 body {
-  /* background-color: var(--main_color); */
+  background-color: var(--main_color);
   /* background-color: aliceblue; */
 }
 a {
@@ -21,9 +20,6 @@ img {
   filter: invert(1);
   width: 100%;
 }
-main {
-  /* border: 1px dashed red; */
-}
 button {
   background-color: transparent;
   border: 2px solid var(--contrast_color);
@@ -31,6 +27,8 @@ button {
   border-radius: 5em;
   font-weight: 400;
 }
+
+/* Header */
 
 .head {
   width: 100%;
@@ -49,7 +47,6 @@ button {
   align-items: center;
   gap: 1vw;
 }
-
 .logo {
   --b: 2px; /* thickness of the border */
   --c: var(--hue_color); /* color of the border */
@@ -100,7 +97,6 @@ button {
   border-bottom: 0.5px solid white;
   font-weight: 400;
 }
-
 .main-menu a:nth-child(2) {
   font-size: 15px;
   opacity: 1;
@@ -113,21 +109,87 @@ button {
   align-items: center;
   gap: 1vw;
 }
-
 .sign-up {
   opacity: 0.7;
   text-decoration: underline;
 }
-
 .sign-up:hover {
   cursor: pointer;
 }
-
 .log-in:hover {
   box-shadow: 2px 2px 8px var(--contrast_color);
   transform: scale(1.1);
   cursor: pointer;
 }
+
+/* Welcome */
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 8vw;
+  background-color: var(--main_color);
+  padding: 0 4vw;
+  margin: 2vw 0;
+  position: relative;
+}
+hr {
+  position: relative;
+  top: 30%;
+  width: 100%;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0)
+  );
+}
+.profile-pic {
+  filter: invert(0);
+  filter: grayscale(100%);
+  width: auto;
+  height: 5vw;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 30;
+}
+
+.welcome-text {
+  display: flex;
+  align-items: flex-end;
+  gap: 1vw;
+  position: absolute;
+  bottom: 0;
+}
+.welcome-text h3 {
+  font-weight: 700;
+  font-size: 25px;
+}
+.welcome-text h4 {
+  font-weight: 300;
+  font-size: 25px;
+}
+@keyframes borderGlow {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  }
+}
+
+.profile-pic {
+  animation: borderGlow 10s infinite;
+}
+
+/* Main - services */
 
 .main-content {
   width: 100%;
@@ -170,7 +232,6 @@ button {
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
 }
-
 .img-card {
   width: 10vw;
 }
@@ -182,10 +243,10 @@ button {
 }
 
 /* Modales */
+
 .modal-not-show {
   display: none;
 }
-
 .modal-bg {
   position: fixed;
   width: 100%;
@@ -213,15 +274,10 @@ button {
 .modal-title-div {
   width: 50%;
   height: 100%;
-  background: linear-gradient(
-    45deg,
-    rgb(10, 10, 10) 0%,
-    rgb(50, 50, 50) 100%
-  );
+  background: linear-gradient(45deg, rgb(10, 10, 10) 0%, rgb(50, 50, 50) 100%);
   display: flex;
   align-items: center;
 }
-
 .modal-show {
   width: 100%;
   height: 100%;
@@ -230,7 +286,6 @@ button {
   justify-content: center;
   align-items: center;
 }
-
 .modal-container form {
   display: flex;
   flex-direction: column;
@@ -245,14 +300,12 @@ button {
   height: 3vw;
   display: flex;
 }
-
 .input-div img {
   height: 100%;
   width: auto;
   aspect-ratio: 1/1;
   background-color: rgb(255, 255, 255);
 }
-
 .input-div input {
   height: 100%;
   width: 100%;
@@ -281,8 +334,7 @@ button {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0vw 4vw;
-
+  margin-top: 1vw;
 }
 
 .submit-form-div p {
@@ -290,6 +342,7 @@ button {
   text-decoration: underline;
 }
 
-.submit-form-div p:hover, button{
+.submit-form-div p:hover,
+button {
   cursor: pointer;
 }

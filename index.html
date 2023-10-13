@@ -12,6 +12,7 @@
       rel="stylesheet"
     />
   </head>
+
   <body>
     <header class="head">
       <div class="logo-container">
@@ -27,9 +28,21 @@
       </nav>
       <div class="log-in-out">
         <span class="sign-up">Registrarse</span>
-        <button class="log-in" >Acceder</button>
+        <button class="log-in">Acceder</button>
       </div>
     </header>
+    <section class="welcome">
+      <img
+        src="https://thispersondoesnotexist.com/"
+        alt="profile-pic"
+        class="profile-pic"
+      />
+      <hr />
+      <div class="welcome-text">
+        <h3>Bienvenid@,</h3>
+        <h4>Nombre</h4>
+      </div>
+    </section>
     <main class="main-content">
       <div class="bg-main"></div>
       <article class="service-card">
@@ -43,7 +56,7 @@
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam illum,
           blanditiis dolorum voluptates quos debitis in.
         </p>
-        <button>IR →</button>
+        <button type="button" onclick="consultarSaldo()">IR →</button>
       </article>
       <article class="service-card">
         <h2 class="title-card">RETIRAR DINERO</h2>
@@ -88,34 +101,46 @@
     <section class="modal-bg modal-not-show">
       <div class="modal-container">
         <div class="modal-signUp modal-show">
-          <form action="">
+          <form id="signUpForm" action="">
             <div class="input-div">
-              <input type="text" placeholder="Usuario" />
+              <input type="text" placeholder="Usuario" name="Usuario" />
               <img src="/assets/img/user.svg" alt="icon" />
             </div>
             <div class="input-div">
-              <input type="number" placeholder="Saldo inicial" />
+              <input
+                type="number"
+                placeholder="Saldo inicial"
+                name="Saldo inicial"
+              />
               <img src="/assets/img/dollar.svg" alt="icon" />
             </div>
             <div class="input-div">
-              <input type="password" placeholder="Contraseña nueva" />
+              <input
+                type="password"
+                placeholder="Contraseña nueva"
+                name="Contraseña nueva"
+              />
               <img src="/assets/img/key-outlined.svg" alt="icon" />
             </div>
             <div class="input-div">
-              <input type="password" placeholder="Confirmar contraseña" />
+              <input
+                type="password"
+                placeholder="Confirmar contraseña"
+                name="Confirmar contraseña"
+              />
               <img src="/assets/img/key-outlined.svg" alt="icon" />
             </div>
+            <div class="submit-form-div">
+              <p id="signUp-to-logIn">¿Ya tienes cuenta?</p>
+              <button class="signUpForm" type="submit">CREAR</button>
+            </div>
           </form>
-          <div class="submit-form-div">
-            <p id="signUp-to-logIn" >Ya tengo cuenta</p>
-            <button type="submit" onclick="crearCuenta()">CREAR</button>
-          </div>
         </div>
         <div class="modal-title-div">
           <h2 class="modal-title">INICIAR SESIÓN</h2>
         </div>
         <div class="modal-logIn modal-not-show">
-          <form action="">
+          <form id="iniciarSesionForm" action="">
             <div class="input-div">
               <img src="/assets/img/user.svg" alt="icon" />
               <input type="text" placeholder="Usuario" />
@@ -124,12 +149,13 @@
               <img src="/assets/img/key-outlined.svg" alt="icon" />
               <input type="password" placeholder="Contraseña" />
             </div>
+            <div class="submit-form-div">
+              <p id="logIn-to-signUp">¿No tienes cuenta?</p>
+              <button id="accederBtn" type="button" onclick="iniciarSesion()">
+                ACCEDER
+              </button>
+            </div>
           </form>
-          <div class="submit-form-div">
-            <p id="logIn-to-signUp" >No tengo cuenta</p>
-            <button type="submit" onclick="crearCuenta()">ACCEDER</button>
-          </div>
-          <!-- <button type="submit">INGRESAR</button> -->
         </div>
       </div>
     </section>
