@@ -1,11 +1,27 @@
 // Lista de cuentas registradas en la aplicación
 const cuentas = [];
 
+
+
+// Expresiones regulares para validar nombre de usuario y contraseña
+const usuarioRegExp = /^[a-zA-Z_]{4,}$/;
+const contrasenaRegExp = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
 // Función para crear una nueva cuenta bancaria
 function crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña) {
   if (saldoInicial < 100000) {
     alert("Saldo inicial debe ser de al menos $100,000");
     return "Saldo inicial debe ser de al menos $100,000";
+  }
+
+  if (!usuario.match(usuarioRegExp)) {
+    alert("Nombre de usuario no válido. Debe contener al menos 4 caracteres alfanuméricos.");
+    return "Nombre de usuario no válido";
+  }
+
+  if (!contrasenaRegExp.test(contraseña)) {
+    alert("La contraseña debe contener al menos 8 caracteres con al menos una mayúscula, una minúscula y un dígito.");
+    return "Contraseña no válida";
   }
 
   if (contraseña !== confirmacionContraseña) {
@@ -45,6 +61,14 @@ document.addEventListener("DOMContentLoaded", function () {
     modalBg.classList.add("modal-show");
   }
 
+  function cerrarModalAcceso() {
+    modalSignUp.classList.remove("modal-show");
+    modalLogIn.classList.remove("modal-show");
+    modalBg.classList.remove("modal-show");
+    modalBg.classList.add("modal-not-show");
+    signUpForm.reset();
+  }
+
   function abrirModalRegistro() {
     modalSignUp.classList.add("modal-show");
     modalSignUp.classList.remove("modal-not-show");
@@ -66,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
   modalBg.addEventListener("click", function (e) {
     if (e.target === modalBg) {
       cerrarModalRegistro();
+      cerrarModalAcceso();
     }
   });
 
@@ -82,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const contraseñaInput = signUpForm.querySelector('input[name="Contraseña nueva"]').value;
     const confirmacionContraseñaInput = signUpForm.querySelector('input[name="Confirmar contraseña"]').value;
 
-
     const mensaje = crearCuenta(usuarioInput, saldoInicialInput, contraseñaInput, confirmacionContraseñaInput);
 
     if (mensaje === "Cuenta creada exitosamente.") {
@@ -98,30 +122,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let intentosFallidos = 0;
 
+const welcomeUser = document.querySelector('.welcome')
+
 function iniciarSesion(usuario, contraseña) {
+
+  const usuarioInput = document.querySelector('#iniciarSesionForm input[type="text"]').value;
+  const contraseñaInput = document.querySelector('#iniciarSesionForm input[type="password"]').value;
+  const loginbtn = document.querySelector('.log-in');
+  const signbtn = document.querySelector('.sign-up');
 
   const cuenta = cuentas.find((c) => c.usuario === usuario);
 
   console.log("Cuenta encontrada:", cuenta);
 
   if (!cuenta) {
-    return "Cuenta no encontrada";
+    alert("Cuenta no encontrada");
+    return;
   }
 
-  if (cuenta.contraseña !== contraseña) {
+  if (!contrasenaRegExp.test(contraseñaInput)) {
+    alert("Contraseña no válida. Debe contener al menos 8 caracteres con al menos una mayúscula, una minúscula y un dígito.");
+    return;
+  }
+
+  if (cuenta.contraseña !== contraseñaInput) {
     intentosFallidos++;
 
     if (intentosFallidos >= 3) {
       bloquearFormularioAcceso();
-      return "Número máximo de intentos alcanzado. Formulario bloqueado.";
+      alert("Número máximo de intentos alcanzado. Formulario bloqueado.");
+      return;
     }
 
-    return `Contraseña incorrecta. Intentos restantes: ${3 - intentosFallidos}`;
+    alert(`Contraseña incorrecta. Intentos restantes: ${3 - intentosFallidos}`);
+  } else {
+    intentosFallidos = 0; // Restablece los intentos fallidos si la contraseña es correcta
+    loginbtn.style.visibility = 'hidden';
+    signbtn.style.visibility = 'hidden';
+    welcomeUser.style.display = 'flex';
+    alert("Inicio de sesión exitoso");
+    document.getElementById("nombreUsuario").textContent = cuenta.nombre; // Cambiar el nombre en la bienvenida
   }
-
-  intentosFallidos = 0; // Restablece los intentos fallidos si la contraseña es correcta
-
-  return cuenta;
 }
 
 function bloquearFormularioAcceso() {
