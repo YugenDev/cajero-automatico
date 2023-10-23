@@ -109,11 +109,11 @@ button {
   align-items: center;
   gap: 1vw;
 }
-.sign-up {
+.sign-up,.sign-out {
   opacity: 0.7;
   text-decoration: underline;
 }
-.sign-up:hover {
+.sign-up:hover, .sign-out:hover {
   cursor: pointer;
 }
 .log-in:hover {
@@ -125,7 +125,7 @@ button {
 /* Welcome */
 
 .welcome {
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -137,7 +137,7 @@ button {
 }
 hr {
   position: relative;
-  top: 30%;
+  top: 35%;
   width: 100%;
   border: 0;
   height: 1px;

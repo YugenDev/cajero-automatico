@@ -1,6 +1,8 @@
-// Lista de cuentas registradas en la aplicación
+// Variables globales
+var isLogged=false;
+var currentUser={};
 const cuentas = [];
-
+let intentosFallidos = 0;
 
 
 // Expresiones regulares para validar nombre de usuario y contraseña
@@ -41,6 +43,8 @@ function crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña
   return "Cuenta creada exitosamente.";
 }
 
+
+// Abrir-cerrar modal de registro-ingreso
 document.addEventListener("DOMContentLoaded", function () {
   const signUpButton = document.querySelector(".sign-up");
   const logInButton = document.querySelector(".log-in");
@@ -85,18 +89,20 @@ document.addEventListener("DOMContentLoaded", function () {
     signUpForm.reset();
   }
 
-  signUpButton.addEventListener("click", abrirModalRegistro);
-
+  // cerrar y reiniciar ambos formularios
   modalBg.addEventListener("click", function (e) {
     if (e.target === modalBg) {
       cerrarModalRegistro();
       cerrarModalAcceso();
     }
   });
-
+  
+  // Abrir formularios
+  signUpButton.addEventListener("click", abrirModalRegistro);
+  logInButton.addEventListener("click", abrirModalAcceder);
+  //cambiar entre formularios
   logInToSignUp.addEventListener("click", abrirModalRegistro);
   signUpToLogIn.addEventListener("click", abrirModalAcceder);
-  logInButton.addEventListener("click", abrirModalAcceder);
 
   signUpForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -111,6 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (mensaje === "Cuenta creada exitosamente.") {
       alert(mensaje);
+      
       cerrarModalRegistro();
     } else {
       alert(mensaje);
@@ -120,7 +127,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Función para iniciar sesión
 
-let intentosFallidos = 0;
 
 const welcomeUser = document.querySelector('.welcome')
 
@@ -168,6 +174,16 @@ function iniciarSesion(usuario, contraseña) {
 function bloquearFormularioAcceso() {
   // aqui luego definimos como vamos a hacer el bloqueo del formulario 
 }
+
+
+
+
+
+
+
+
+
+
 
 // Función para realizar una consulta de saldo
 function consultarSaldo(cuenta) {
@@ -219,6 +235,11 @@ function registrarTransaccion(cuenta, descripcion) {
   const fecha = new Date().toLocaleString();
   cuenta.historial.push({ fecha, descripcion });
 }
+
+
+
+
+
 
 
 
