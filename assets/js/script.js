@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const logInToSignUp = document.querySelector("#logIn-to-signUp");
   const signUpForm = document.querySelector("#signUpForm");
   const logInForm = document.querySelector("#iniciarSesionForm");
+  const consultarSaldoBtn = document.querySelector('.consultarSaldoBtn');
+  const transferirBtn = document.querySelector('.transferirBtn');
+  const consignarBtn = document.querySelector('.consignarBtn');
 
 
   // cerrar-abrir-intercambiar-reiniciar ambos formularios
