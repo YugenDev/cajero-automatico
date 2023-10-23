@@ -1,28 +1,70 @@
+
+var cuentaPrueba={
+  nombre: "anfevasa",
+  numeroCuenta: 12345678,
+  saldo:10000000,
+  contraseña: "123",
+  historial:[]  
+}
+
 // Variables globales
-var isLogged=false;
-var currentUser={};
-const cuentas = [];
+var estaLoggeado = false;
+var usuarioActual = {};
+const cuentas = [cuentaPrueba];
 let intentosFallidos = 0;
 
 
-// Expresiones regulares para validar nombre de usuario y contraseña
-const usuarioRegExp = /^[a-zA-Z_]{4,}$/;
-const contrasenaRegExp = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-// Función para crear una nueva cuenta bancaria
-function crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña) {
+// Abrir-cerrar modal de registro-ingreso
+document.addEventListener("DOMContentLoaded", function () {
+  const signUpButton = document.querySelector(".sign-up");
+  const logInButton = document.querySelector(".log-in");
+  const signOutButton = document.querySelector(".sign-out");
+  const modalBg = document.querySelector(".modal-bg");
+  const signUpToLogIn = document.querySelector("#signUp-to-logIn");
+  const logInToSignUp = document.querySelector("#logIn-to-signUp");
+  const signUpForm = document.querySelector("#signUpForm");
+  const logInForm = document.querySelector("#iniciarSesionForm");
+
+
+  // cerrar-abrir-intercambiar-reiniciar ambos formularios
+  modalBg.addEventListener("click", cerrarModal);
+  signUpButton.addEventListener("click", abrirModalRegistro);
+  logInButton.addEventListener("click", abrirModalAcceder);
+  logInToSignUp.addEventListener("click", abrirModalRegistro);
+  signUpToLogIn.addEventListener("click", abrirModalAcceder);
+
+
+  // Gestión de sesión
+  signUpForm.addEventListener("submit", envioCrearCuenta);
+  logInForm.addEventListener("submit", envioInicioSesion);
+  signOutButton.addEventListener("click", envioCerrarSesion);
+  
+
+
+});
+
+
+//Funciones con solo lógica
+function crearCuenta(usuario,  saldoInicial,  contraseña,  confirmacionContraseña) {
   if (saldoInicial < 100000) {
     alert("Saldo inicial debe ser de al menos $100,000");
     return "Saldo inicial debe ser de al menos $100,000";
   }
 
+  const usuarioRegExp = /^[a-zA-Z_]{4,}$/;
   if (!usuario.match(usuarioRegExp)) {
-    alert("Nombre de usuario no válido. Debe contener al menos 4 caracteres alfanuméricos.");
+    alert(
+      "Nombre de usuario no válido. Debe contener al menos 4 caracteres alfanuméricos."
+    );
     return "Nombre de usuario no válido";
   }
+  const contrasenaRegExp = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
   if (!contrasenaRegExp.test(contraseña)) {
-    alert("La contraseña debe contener al menos 8 caracteres con al menos una mayúscula, una minúscula y un dígito.");
+    alert(
+      "La contraseña debe contener al menos 8 caracteres con al menos una mayúscula, una minúscula y un dígito."
+    );
     return "Contraseña no válida";
   }
 
@@ -33,156 +75,200 @@ function crearCuenta(usuario, saldoInicial, contraseña, confirmacionContraseña
 
   const nuevaCuenta = {
     nombre: usuario,
+    numeroCuenta: Math.floor(Math.random()*100000000),
     saldo: saldoInicial,
     contraseña: contraseña,
     historial: [],
   };
 
   cuentas.push(nuevaCuenta);
-  console.log(cuentas);
+  iniciarSesion(usuario,contraseña);
+  visualWelcome();
+  estaLoggeado=true;
   return "Cuenta creada exitosamente.";
 }
 
-
-// Abrir-cerrar modal de registro-ingreso
-document.addEventListener("DOMContentLoaded", function () {
-  const signUpButton = document.querySelector(".sign-up");
-  const logInButton = document.querySelector(".log-in");
-  const modalSignUp = document.querySelector(".modal-signUp");
-  const modalLogIn = document.querySelector(".modal-logIn");
-  const modalTitle = document.querySelector(".modal-title");
-  const modalBg = document.querySelector(".modal-bg");
-  const signUpForm = document.querySelector("#signUpForm");
-  const signUpToLogIn = document.querySelector("#signUp-to-logIn");
-  const logInToSignUp = document.querySelector("#logIn-to-signUp");
-
-  function abrirModalAcceder() {
-    modalSignUp.classList.add("modal-not-show");
-    modalSignUp.classList.remove("modal-show");
-    modalLogIn.classList.add("modal-show");
-    modalLogIn.classList.remove("modal-not-show");
-    modalTitle.textContent = "INICIAR SESIÓN";
-    modalBg.classList.add("modal-show");
-  }
-
-  function cerrarModalAcceso() {
-    modalSignUp.classList.remove("modal-show");
-    modalLogIn.classList.remove("modal-show");
-    modalBg.classList.remove("modal-show");
-    modalBg.classList.add("modal-not-show");
-    signUpForm.reset();
-  }
-
-  function abrirModalRegistro() {
-    modalSignUp.classList.add("modal-show");
-    modalSignUp.classList.remove("modal-not-show");
-    modalLogIn.classList.add("modal-not-show");
-    modalLogIn.classList.remove("modal-show");
-    modalTitle.textContent = "CREAR CUENTA";
-    modalBg.classList.add("modal-show");
-  }
-
-  function cerrarModalRegistro() {
-    modalSignUp.classList.remove("modal-show");
-    modalBg.classList.remove("modal-show");
-    modalBg.classList.add("modal-not-show");
-    signUpForm.reset();
-  }
-
-  // cerrar y reiniciar ambos formularios
-  modalBg.addEventListener("click", function (e) {
-    if (e.target === modalBg) {
-      cerrarModalRegistro();
-      cerrarModalAcceso();
-    }
-  });
-  
-  // Abrir formularios
-  signUpButton.addEventListener("click", abrirModalRegistro);
-  logInButton.addEventListener("click", abrirModalAcceder);
-  //cambiar entre formularios
-  logInToSignUp.addEventListener("click", abrirModalRegistro);
-  signUpToLogIn.addEventListener("click", abrirModalAcceder);
-
-  signUpForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    console.log("formulario enviado");
-
-    const usuarioInput = signUpForm.querySelector('input[name="Usuario"]').value;
-    const saldoInicialInput = parseFloat(signUpForm.querySelector('input[name="Saldo inicial"]').value);
-    const contraseñaInput = signUpForm.querySelector('input[name="Contraseña nueva"]').value;
-    const confirmacionContraseñaInput = signUpForm.querySelector('input[name="Confirmar contraseña"]').value;
-
-    const mensaje = crearCuenta(usuarioInput, saldoInicialInput, contraseñaInput, confirmacionContraseñaInput);
-
-    if (mensaje === "Cuenta creada exitosamente.") {
-      alert(mensaje);
-      
-      cerrarModalRegistro();
-    } else {
-      alert(mensaje);
-    }
-  });
-});
-
-// Función para iniciar sesión
-
-
-const welcomeUser = document.querySelector('.welcome')
-
 function iniciarSesion(usuario, contraseña) {
-
-  const usuarioInput = document.querySelector('#iniciarSesionForm input[type="text"]').value;
-  const contraseñaInput = document.querySelector('#iniciarSesionForm input[type="password"]').value;
-  const loginbtn = document.querySelector('.log-in');
-  const signbtn = document.querySelector('.sign-up');
-
-  const cuenta = cuentas.find((c) => c.usuario === usuario);
-
-  console.log("Cuenta encontrada:", cuenta);
-
+  const cuenta = cuentas.find((c) => c.nombre === usuario);
   if (!cuenta) {
     alert("Cuenta no encontrada");
-    return;
+    return false;
   }
 
-  if (!contrasenaRegExp.test(contraseñaInput)) {
-    alert("Contraseña no válida. Debe contener al menos 8 caracteres con al menos una mayúscula, una minúscula y un dígito.");
-    return;
-  }
-
-  if (cuenta.contraseña !== contraseñaInput) {
+  if (cuenta.contraseña !== contraseña) {
     intentosFallidos++;
 
     if (intentosFallidos >= 3) {
       bloquearFormularioAcceso();
       alert("Número máximo de intentos alcanzado. Formulario bloqueado.");
-      return;
+      return false;
     }
 
     alert(`Contraseña incorrecta. Intentos restantes: ${3 - intentosFallidos}`);
   } else {
-    intentosFallidos = 0; // Restablece los intentos fallidos si la contraseña es correcta
-    loginbtn.style.visibility = 'hidden';
-    signbtn.style.visibility = 'hidden';
-    welcomeUser.style.display = 'flex';
-    alert("Inicio de sesión exitoso");
-    document.getElementById("nombreUsuario").textContent = cuenta.nombre; // Cambiar el nombre en la bienvenida
+    // Loggeo exitoso
+    intentosFallidos = 0;
+    usuarioActual=cuenta;
+    return true;
   }
 }
 
-function bloquearFormularioAcceso() {
-  // aqui luego definimos como vamos a hacer el bloqueo del formulario 
+function cerrarSesion() {
+  usuarioActual={  };
+  visualWelcome();
+  estaLoggeado=false;
 }
 
 
 
 
+//Funciones HTML
 
+//----------------Modales---------------
+function abrirModalAcceder() {
+  const modalSignUp = document.querySelector(".modal-signUp");
+  const modalLogIn = document.querySelector(".modal-logIn");
+  const modalBg = document.querySelector(".modal-bg");
+  const modalTitle = document.querySelector(".modal-title");
 
+  modalSignUp.classList.add("modal-not-show");
+  modalSignUp.classList.remove("modal-show");
+  modalLogIn.classList.add("modal-show");
+  modalLogIn.classList.remove("modal-not-show");
+  modalTitle.textContent = "INICIAR SESIÓN";
+  modalBg.classList.add("modal-show");
+}
 
+function cerrarModalAcceso() {
+  const modalSignUp = document.querySelector(".modal-signUp");
+  const modalLogIn = document.querySelector(".modal-logIn");
+  const modalBg = document.querySelector(".modal-bg");
+  const signUpForm = document.querySelector("#signUpForm");
 
+  modalSignUp.classList.remove("modal-show");
+  modalLogIn.classList.remove("modal-show");
+  modalBg.classList.remove("modal-show");
+  modalBg.classList.add("modal-not-show");
+  signUpForm.reset();
+}
 
+function abrirModalRegistro() {
+  const modalBg = document.querySelector(".modal-bg");
+  const modalSignUp = document.querySelector(".modal-signUp");
+  const modalLogIn = document.querySelector(".modal-logIn");
+  const modalTitle = document.querySelector(".modal-title");
+  
+  modalSignUp.classList.add("modal-show");
+  modalSignUp.classList.remove("modal-not-show");
+  modalLogIn.classList.add("modal-not-show");
+  modalLogIn.classList.remove("modal-show");
+  modalTitle.textContent = "CREAR CUENTA";
+  modalBg.classList.add("modal-show");
+}
+
+function cerrarModalRegistro() {
+  const modalBg = document.querySelector(".modal-bg");
+  const signUpForm = document.querySelector("#signUpForm");
+  const modalSignUp = document.querySelector(".modal-signUp");
+
+  modalSignUp.classList.remove("modal-show");
+  modalBg.classList.remove("modal-show");
+  modalBg.classList.add("modal-not-show");
+  signUpForm.reset();
+}
+
+function cerrarModal(e) {
+  const modalBg = document.querySelector(".modal-bg");
+
+  if (e.target === modalBg) {
+      cerrarModalRegistro();
+      cerrarModalAcceso();
+    }
+}
+
+//--------------Gestión de sesión---------
+function envioCrearCuenta(e) {  
+    e.preventDefault();
+
+    const usuarioInput = signUpForm.querySelector(
+      'input[name="Usuario"]'
+    ).value;
+    const saldoInicialInput = parseFloat(
+      signUpForm.querySelector('input[name="Saldo inicial"]').value
+    );
+    const contraseñaInput = signUpForm.querySelector(
+      'input[name="Contraseña nueva"]'
+    ).value;
+    const confirmacionContraseñaInput = signUpForm.querySelector(
+      'input[name="Confirmar contraseña"]'
+    ).value;
+
+    const mensaje = crearCuenta(
+      usuarioInput,
+      saldoInicialInput,
+      contraseñaInput,
+      confirmacionContraseñaInput
+    );
+
+    if (mensaje === "Cuenta creada exitosamente.") {
+      alert(mensaje);
+
+      cerrarModalRegistro();
+    } else {
+      alert(mensaje);
+    }  
+}
+
+function envioInicioSesion(e) {
+  e.preventDefault();
+
+  const usuarioInput = document.querySelector(
+    '#iniciarSesionForm input[type="text"]'
+  ).value;
+  const contraseñaInput = document.querySelector(
+    '#iniciarSesionForm input[type="password"]'
+  ).value;
+
+  if(iniciarSesion(usuarioInput,contraseñaInput)){    
+    visualWelcome();
+    estaLoggeado=true;
+    console.log("Queda log: "+estaLoggeado);
+  }
+  
+}
+
+function bloquearFormularioAcceso() {
+  const logInOutDiv = document.querySelector(".log-in-out");
+  logInOutDiv.style.display = 'none';
+
+  cerrarModalAcceso();
+}
+
+function envioCerrarSesion() {
+  cerrarSesion();
+}
+
+function visualWelcome() {
+    console.log(estaLoggeado);
+    const welcomeUser = document.querySelector(".welcome");    
+    const logInOutDiv = document.querySelector(".log-in-out");
+    const signOutSpan = document.querySelector(".sign-out");
+    const nombreUsuarioH = document.querySelector("#nombreUsuario");
+
+    if(estaLoggeado){
+      welcomeUser.style.display = 'none';
+      signOutSpan.style.display = 'none';
+      logInOutDiv.style.display = 'flex';
+    }else{
+
+      welcomeUser.style.display = 'flex';
+      signOutSpan.style.display = 'flex';
+      logInOutDiv.style.display = 'none';
+      nombreUsuarioH.textContent = usuarioActual.nombre;
+
+      cerrarModalAcceso();
+    }
+}
 
 
 // Función para realizar una consulta de saldo
@@ -211,8 +297,14 @@ function transferirCuenta(origen, destinatario, cantidad) {
   ) {
     origen.saldo -= cantidad;
     destinatario.saldo += cantidad;
-    registrarTransaccion(origen, `Transferencia a ${destinatario.nombre} de $${cantidad}`);
-    registrarTransaccion(destinatario, `Transferencia de ${origen.nombre} de $${cantidad}`);
+    registrarTransaccion(
+      origen,
+      `Transferencia a ${destinatario.nombre} de $${cantidad}`
+    );
+    registrarTransaccion(
+      destinatario,
+      `Transferencia de ${origen.nombre} de $${cantidad}`
+    );
     return `Transferencia exitosa. Saldo restante: $${origen.saldo}`;
   } else {
     return "Fondos insuficientes, cantidad no válida o destinatario no válido";
@@ -235,14 +327,6 @@ function registrarTransaccion(cuenta, descripcion) {
   const fecha = new Date().toLocaleString();
   cuenta.historial.push({ fecha, descripcion });
 }
-
-
-
-
-
-
-
-
 
 // // Ejemplo de uso
 // function ejemploDeUso() {

@@ -113,6 +113,9 @@ button {
   opacity: 0.7;
   text-decoration: underline;
 }
+.sign-out{
+  display: none;
+}
 .sign-up:hover, .sign-out:hover {
   cursor: pointer;
 }
@@ -125,7 +128,7 @@ button {
 /* Welcome */
 
 .welcome {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   width: 100%;
