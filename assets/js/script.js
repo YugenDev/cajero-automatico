@@ -1,16 +1,82 @@
 
-var cuentaPrueba={
-  nombre: "anfevasa",
-  numeroCuenta: 12345678,
-  saldo:10000000,
-  contraseña: "123",
-  historial:[]  
-}
+var cuentasDePrueba = [
+  {
+    nombre: "anfevasa",
+    numeroCuenta: 12345678,
+    saldo: 10000000,
+    contraseña: "123",
+    historial: []
+  },
+  {
+    nombre: "usuario2",
+    numeroCuenta: 23456789,
+    saldo: 5000000,
+    contraseña: "password2",
+    historial: []
+  },
+  {
+    nombre: "usuario3",
+    numeroCuenta: 34567890,
+    saldo: 7500000,
+    contraseña: "password3",
+    historial: []
+  },
+  {
+    nombre: "usuario4",
+    numeroCuenta: 45678901,
+    saldo: 3000000,
+    contraseña: "password4",
+    historial: []
+  },
+  {
+    nombre: "usuario5",
+    numeroCuenta: 56789012,
+    saldo: 2000000,
+    contraseña: "password5",
+    historial: []
+  },
+  {
+    nombre: "usuario6",
+    numeroCuenta: 67890123,
+    saldo: 1500000,
+    contraseña: "password6",
+    historial: []
+  },
+  {
+    nombre: "usuario7",
+    numeroCuenta: 78901234,
+    saldo: 9000000,
+    contraseña: "password7",
+    historial: []
+  },
+  {
+    nombre: "usuario8",
+    numeroCuenta: 89012345,
+    saldo: 4500000,
+    contraseña: "password8",
+    historial: []
+  },
+  {
+    nombre: "usuario9",
+    numeroCuenta: 90123456,
+    saldo: 6000000,
+    contraseña: "password9",
+    historial: []
+  },
+  {
+    nombre: "usuario10",
+    numeroCuenta: 1234567,
+    saldo: 7500000,
+    contraseña: "password10",
+    historial: []
+  }
+];
+
 
 // Variables globales
 var estaLoggeado = false;
 var usuarioActual = {};
-const cuentas = [cuentaPrueba];
+const cuentas = [...cuentasDePrueba];
 let intentosFallidos = 0;
 
 
