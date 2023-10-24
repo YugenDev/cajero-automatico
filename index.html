@@ -99,7 +99,7 @@
         <button class="consignarBtn" type="button">IR →</button>
       </article>
     </main>
-    <section class="modal-bg modal-not-show">
+    <section id="modal-account" class="modal-bg modal-not-show">
       <div class="modal-container">
         <div class="modal-signUp modal-show">
           <form id="signUpForm" action="">
@@ -161,20 +161,43 @@
         </div>
       </div>
     </section>
-    <section class="modal-bg modal-show">
+    <section id="modal-services" class="modal-bg modal-not-show">
       <div class="modal-container services-modal">
-        <h2>Título servicio</h2>
+        <h2 class="services-modal-title">Título servicio</h2>
         <div class="div__service div__consultar-saldo"></div>
-        <div class="div__service div__retirar"></div>
-        <div class="div__service div__transferir"></div>
+        <div class="div__service div__retirar">
+          <form id="retirarForm" action="">
+            <div class="input-div">
+              <label for="retirar">Ingrese la cantidad que desea retirar:</label>
+              <img src="/assets/img/dollar.svg" alt="">
+              <input type="number" id="retirar" name="cantidad" placeholder="">
+            </div>
+              <button type="submit">Retirar</button>
+          </form>
+        </div>
+        <div class="div__service div__transferir">
+          <form id="transferirForm" action="">
+            <div class="input-div">
+              <label for="cuentaDestino">Ingrese el número de cuenta al que desea transferir:</label>
+              <img src="/assets/img/user.svg" alt="">
+              <input type="number" id="cuentaTransferencia" name="cuentaDestino" placeholder="">
+            </div>
+            <div class="input-div">
+              <label for="cantidadTransferencia">Ingrese la cantidad que desea transferir:</label>
+              <img src="/assets/img/dollar.svg" alt="">
+              <input type="number" id="cantidadTransferencia" name="cantidad" placeholder="">
+            </div>
+            <button type="submit">Transferir</button>
+          </form>
+        </div>
         <div class="div__service div__consignar">
-          <form action="">
+          <form id="consignarForm" action="">
             <div class="input-div">
               <label for="consignar">Ingrese la cantidad que desea consignar:</label>
               <img src="/assets/img/dollar.svg" alt="">
-              <input type="number" id="consignar" placeholder="min: $10.000">
+              <input type="number" id="consignar" name="cantidad" placeholder="min: $10.000">
             </div>
-              <button>Consignar</button>
+              <button type="submit">Consignar</button>
           </form>
         </div>
       </div>

@@ -65,7 +65,7 @@ var cuentasDePrueba = [
   },
   {
     nombre: "usuario10",
-    numeroCuenta: 1234567,
+    numeroCuenta: 12334567,
     saldo: 7500000,
     contraseña: "password10",
     historial: []
@@ -74,8 +74,12 @@ var cuentasDePrueba = [
 
 
 // Variables globales
-var estaLoggeado = false;
-var usuarioActual = {};
+var estaLoggeado = true;
+var usuarioActual = {nombre: "anfevasa",
+numeroCuenta: 12345678,
+saldo: 10000000,
+contraseña: "123",
+historial: []};
 const cuentas = [...cuentasDePrueba];
 let intentosFallidos = 0;
 
@@ -86,18 +90,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const signUpButton = document.querySelector(".sign-up");
   const logInButton = document.querySelector(".log-in");
   const signOutButton = document.querySelector(".sign-out");
-  const modalBg = document.querySelector(".modal-bg");
+
+  const modalBgAccount = document.querySelector("#modal-account");
   const signUpToLogIn = document.querySelector("#signUp-to-logIn");
   const logInToSignUp = document.querySelector("#logIn-to-signUp");
   const signUpForm = document.querySelector("#signUpForm");
   const logInForm = document.querySelector("#iniciarSesionForm");
-  const consultarSaldoBtn = document.querySelector('#consultarSaldoBtn');
-  const transferirBtn = document.querySelector('#transferirBtn');
-  const consignarBtn = document.querySelector('#consignarBtn');
-  const retirarBtn = document.querySelector('#retirarBtn')
+
+  const consultarSaldoBtn = document.querySelector('.consultarSaldoBtn');
+  const transferirBtn = document.querySelector('.transferirBtn');
+  const consignarBtn = document.querySelector('.consignarBtn');
+  const retirarBtn = document.querySelector('.retirarBtn');
+  
+  const modalBgServices = document.querySelector("#modal-services");
+  const consignarForm = document.querySelector('#consignarForm');
+  const retirarForm = document.querySelector('#retirarForm');
+  const transferirForm = document.querySelector('#transferirForm');
+
+
+
 
   // cerrar-abrir-intercambiar-reiniciar ambos formularios
-  modalBg.addEventListener("click", cerrarModal);
+  modalBgAccount.addEventListener("click", cerrarModal);
   signUpButton.addEventListener("click", abrirModalRegistro);
   logInButton.addEventListener("click", abrirModalAcceder);
   logInToSignUp.addEventListener("click", abrirModalRegistro);
@@ -111,10 +125,18 @@ document.addEventListener("DOMContentLoaded", function () {
   
   
   // Gestión de servicios
+  consignarBtn.addEventListener("click", abrirModalConsignar);
   consultarSaldoBtn.addEventListener("click", consultarSaldo);
-  transferirBtn.addEventListener("click", transferirCuenta);
-  consignarBtn.addEventListener("click", consignarDinero);
-  retirarBtn.addEventListener("click", retirarDinero);
+  transferirBtn.addEventListener("click", abrirModalTransferencia);
+  retirarBtn.addEventListener("click", abrirModalRetirar);
+  
+  // Formularios servicios
+  modalBgServices.addEventListener("click", cerrarModalServicios);
+  consignarForm.addEventListener("submit", envioConsignar);
+  retirarForm.addEventListener("submit", envioRetiro);
+  transferirForm.addEventListener("submit", envioTransferencia);
+  
+  
 
 });
 
@@ -195,29 +217,15 @@ function cerrarSesion() {
   estaLoggeado=false;
 }
 
-//-----Servicios------
-function transferirCuenta(origen, destinatario, cantidad) {
-  if (cantidad > 0 && cantidad <= origen.saldo && cantidad >= 10000 && cuentas.includes(destinatario)) {
-    origen.saldo -= cantidad;
-    destinatario.saldo += cantidad;
-    registrarTransaccion(origen,destinatario,cantidad);
-    return `Transferencia exitosa. Saldo restante: $${origen.saldo}`;
-  } else {
-    return "Fondos insuficientes, cantidad no válida o destinatario no válido";
-  }
-}
-
-
-
 
 
 //Funciones HTML
 
-//----------------Modales---------------
+//----------------Modales cuentas---------------
 function abrirModalAcceder() {
   const modalSignUp = document.querySelector(".modal-signUp");
   const modalLogIn = document.querySelector(".modal-logIn");
-  const modalBg = document.querySelector(".modal-bg");
+  const modalBg = document.querySelector("#modal-account");
   const modalTitle = document.querySelector(".modal-title");
 
   modalSignUp.classList.add("modal-not-show");
@@ -231,7 +239,7 @@ function abrirModalAcceder() {
 function cerrarModalAcceso() {
   const modalSignUp = document.querySelector(".modal-signUp");
   const modalLogIn = document.querySelector(".modal-logIn");
-  const modalBg = document.querySelector(".modal-bg");
+  const modalBg = document.querySelector("#modal-account");
   const signUpForm = document.querySelector("#signUpForm");
 
   modalSignUp.classList.remove("modal-show");
@@ -242,7 +250,7 @@ function cerrarModalAcceso() {
 }
 
 function abrirModalRegistro() {
-  const modalBg = document.querySelector(".modal-bg");
+  const modalBg = document.querySelector("#modal-account");
   const modalSignUp = document.querySelector(".modal-signUp");
   const modalLogIn = document.querySelector(".modal-logIn");
   const modalTitle = document.querySelector(".modal-title");
@@ -256,7 +264,7 @@ function abrirModalRegistro() {
 }
 
 function cerrarModalRegistro() {
-  const modalBg = document.querySelector(".modal-bg");
+  const modalBg = document.querySelector("#modal-account");
   const signUpForm = document.querySelector("#signUpForm");
   const modalSignUp = document.querySelector(".modal-signUp");
 
@@ -272,6 +280,7 @@ function cerrarModal(e) {
   if (e.target === modalBg) {
       cerrarModalRegistro();
       cerrarModalAcceso();
+
     }
 }
 
@@ -359,6 +368,142 @@ function visualWelcome() {
     }
 }
 
+//---------- Abrir modal servicio ------------
+function abrirModalConsignar() {
+  if(estaLoggeado){
+    const modalBg = document.querySelector("#modal-services");
+    const modalTitle = document.querySelector(".services-modal-title");
+    modalBg.style.display = "flex"
+    document.querySelector(".div__consignar").style.display = "flex";
+    document.querySelector(".div__transferir").style.display = "none";
+    document.querySelector(".div__consultar-saldo").style.display = "none";
+    document.querySelector(".div__retirar").style.display = "none";
+
+    modalTitle.textContent = "CONSIGNAR";
+    modalBg.classList.add("modal-show");    
+
+  }else{
+    abrirModalAcceder();
+  }
+  
+}
+function abrirModalRetirar() {
+  if(estaLoggeado){
+    const modalBg = document.querySelector("#modal-services");
+    const modalTitle = document.querySelector(".services-modal-title");
+    modalBg.style.display = "flex"
+    document.querySelector(".div__consignar").style.display = "none";
+    document.querySelector(".div__transferir").style.display = "none";
+    document.querySelector(".div__consultar-saldo").style.display = "none";
+    document.querySelector(".div__retirar").style.display = "flex";
+
+    modalTitle.textContent = "RETIRAR";
+    modalBg.classList.add("modal-show");    
+
+  }else{
+    abrirModalAcceder();
+  }
+  
+}
+function abrirModalTransferencia() {
+  if(estaLoggeado){
+    const modalBg = document.querySelector("#modal-services");
+    const modalTitle = document.querySelector(".services-modal-title");
+    modalBg.style.display = "flex"
+    document.querySelector(".div__consignar").style.display = "none";
+    document.querySelector(".div__transferir").style.display = "flex";
+    document.querySelector(".div__consultar-saldo").style.display = "none";
+    document.querySelector(".div__retirar").style.display = "none";
+
+    modalTitle.textContent = "TRANSFERIR DINERO";
+    modalBg.classList.add("modal-show");    
+
+  }else{
+    abrirModalAcceder();
+  }
+  
+}
+
+
+
+
+function cerrarModalServicios(e) {
+  const modalBg = document.querySelector("#modal-services");
+  if(e.target == modalBg){
+    modalBg.style.display= "none"
+    document.querySelector(".div__consignar").style.display = "none";
+    document.querySelector(".div__transferir").style.display = "none";
+    document.querySelector(".div__consultar-saldo").style.display = "none";
+    document.querySelector(".div__retirar").style.display = "none";
+  }
+}
+function cerrarModalServiciosForzado() {
+  const modalBg = document.querySelector("#modal-services");
+  modalBg.style.display= "none"
+  document.querySelector(".div__consignar").style.display = "none";
+  document.querySelector(".div__transferir").style.display = "none";
+  document.querySelector(".div__consultar-saldo").style.display = "none";
+  document.querySelector(".div__retirar").style.display = "none";
+}
+
+//----------- Envío servicios ---------
+
+function envioConsignar(e) {
+  e.preventDefault();
+  
+  const consignarForm = document.querySelector("#consignarForm");
+  const cantidadInput = Number(consignarForm.querySelector(
+      'input[name="cantidad"]'
+    ).value);
+
+    if(consignarDinero(cantidadInput)){
+      alert(`COMPROBANTE DE CONSIGNACIÓN\n\nSe han consignado $ ${cantidadInput} a tu cuenta N° ${usuarioActual.numeroCuenta}\nTu nuevo saldo es de: $ ${usuarioActual.saldo}\n\nPara revisar todos tu movimientos, revisa el servicio de consultar saldo`)
+      consignarForm.reset();
+      cerrarModalServiciosForzado();
+    }
+    
+}
+function envioRetiro(e) {
+  e.preventDefault();
+  
+  const retirarForm = document.querySelector("#retirarForm");
+  const cantidadInput = Number(retirarForm.querySelector(
+      'input[name="cantidad"]'
+    ).value);
+
+    if(retirarDinero(cantidadInput)){
+      alert(`COMPROBANTE DE RETIRO\n\nSe han RETIRADO $ ${cantidadInput} de tu cuenta N° ${usuarioActual.numeroCuenta}\nTu nuevo saldo es de: $ ${usuarioActual.saldo}\n\nPara revisar todos tu movimientos, revisa el servicio de consultar saldo`)
+      retirarForm.reset();
+      cerrarModalServiciosForzado();
+    }
+    
+}
+function envioTransferencia(e) {
+  e.preventDefault();
+  
+  const transferirForm = document.querySelector("#transferirForm");
+  
+  const destinatarioInput = Number(transferirForm.querySelector(
+      'input[name="cuentaDestino"]'
+    ).value);
+  const cantidadInput = Number(transferirForm.querySelector(
+      'input[name="cantidad"]'
+    ).value);
+
+    if(transferirCuenta(destinatarioInput,cantidadInput)){
+      alert(`COMPROBANTE DE TRANSFERENCIA\n\nSe han TRANSFERIDO $ ${cantidadInput} de tu cuenta N° ${usuarioActual.numeroCuenta} a la cuenta N° ${destinatarioInput}\nTu nuevo saldo es de: $ ${usuarioActual.saldo}\n\nPara revisar todos tu movimientos, revisa el servicio de consultar saldo`)
+      transferirForm.reset();
+      cerrarModalServiciosForzado();
+    }
+    
+}
+
+
+
+
+
+
+
 
 // Función para realizar una consulta de saldo
 function consultarSaldo(cuenta) {
@@ -366,40 +511,53 @@ function consultarSaldo(cuenta) {
 }
 
 // Función para realizar un retiro de dinero
-function retirarDinero(cuenta, cantidad) {
-  if (cantidad > 0 && cantidad <= cuenta.saldo && cantidad >= 10000) {
-    cuenta.saldo -= cantidad;
-    registrarTransaccion(cuenta, `Retiro de $${cantidad}`);
-    return `Retiraste $${cantidad}. Saldo restante: $${cuenta.saldo}`;
+function retirarDinero(cantidad) {
+  if (cantidad > 0 && cantidad <= (usuarioActual.saldo-10000) && cantidad >= 10000) {
+    usuarioActual.saldo -= cantidad;
+    registrarTransaccion(null,usuarioActual,cantidad*-1,"Retiro");
+    return true;
   } else {
-    return "Fondos insuficientes, cantidad no válida o el retiro es menor de $10,000";
+    alert ("Fondos insuficientes, cantidad no válida o el retiro es menor de $10,000");
   }
 }
 
-
 // Función para realizar una consignación de dinero
-function consignarDinero(cuenta, cantidad) {
-  if (cantidad > 0 && cantidad >= 10000) {
-    cuenta.saldo += cantidad;
-    registrarTransaccion(cuenta, `Consignación de $${cantidad}`);
-    return `Consignaste $${cantidad}. Saldo restante: $${cuenta.saldo}`;
+function consignarDinero(cantidad) {
+  if (cantidad >= 10000) {
+    usuarioActual.saldo += cantidad;
+    registrarTransaccion(null,usuarioActual,cantidad,"Consignación");
+    return true;
   } else {
     return alert("No puedes consignar menos de $10,000");
   }
 }
 
+// Transferencia
+function transferirCuenta(numeroCuentaDestino, cantidad) {
+  const destinatario = cuentas.find((c)=> c.numeroCuenta === numeroCuentaDestino)
+  console.log(destinatario);
+  if (destinatario!==undefined && cantidad > 0 && cantidad <= usuarioActual.saldo && cantidad >= 10000 ) {
+    usuarioActual.saldo -= cantidad;
+    destinatario.saldo += cantidad;
+    registrarTransaccion(usuarioActual,destinatario,cantidad);
+    return true;
+  } else {
+    alert("Fondos insuficientes, cantidad no válida o destinatario no válido");
+  }
+}
+
 // Función para registrar una transacción en el historial
-function registrarTransaccion(origen,destinatario,cantidad) {
+function registrarTransaccion(origen,destinatario,cantidad,tipo) {
   const fecha = new Date().toLocaleString();
   let nuevaTransferencia = {
-    tipo:"transferencia",
-    origen: origen.numeroCuenta,
-    destinatario: destinatario.numeroCuenta,
+    tipo,
+    origen: origen?.numeroCuenta,
+    destinatario: destinatario?.numeroCuenta,
     cantidad,
     fecha
   }
-  origen.historial.push(nuevaTransferencia);
-  destinatario.historial.push(nuevaTransferencia);
+  origen?.historial.push(nuevaTransferencia);
+  destinatario?.historial.push(nuevaTransferencia);
 }
 
 

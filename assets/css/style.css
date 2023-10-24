@@ -340,7 +340,6 @@ hr {
   align-items: flex-start;
 }
 .submit-form-div {
-  border: 1px solid red;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -388,6 +387,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 4vw;
 }
 .services-modal .input-div{
   width: 100%;
