@@ -91,10 +91,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const logInToSignUp = document.querySelector("#logIn-to-signUp");
   const signUpForm = document.querySelector("#signUpForm");
   const logInForm = document.querySelector("#iniciarSesionForm");
-  const consultarSaldoBtn = document.querySelector('.consultarSaldoBtn');
-  const transferirBtn = document.querySelector('.transferirBtn');
-  const consignarBtn = document.querySelector('.consignarBtn');
-  const retirarBtn = document.querySelector('.retirarBtn')
+  const consultarSaldoBtn = document.querySelector('#consultarSaldoBtn');
+  const transferirBtn = document.querySelector('#transferirBtn');
+  const consignarBtn = document.querySelector('#consignarBtn');
+  const retirarBtn = document.querySelector('#retirarBtn')
 
   // cerrar-abrir-intercambiar-reiniciar ambos formularios
   modalBg.addEventListener("click", cerrarModal);
@@ -120,6 +120,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 //Funciones con solo lógica
+
+//-----Gestión sesión-----
 function crearCuenta(usuario,  saldoInicial,  contraseña,  confirmacionContraseña) {
   if (saldoInicial < 100000) {
     alert("Saldo inicial debe ser de al menos $100,000");
@@ -192,6 +194,19 @@ function cerrarSesion() {
   visualWelcome();
   estaLoggeado=false;
 }
+
+//-----Servicios------
+function transferirCuenta(origen, destinatario, cantidad) {
+  if (cantidad > 0 && cantidad <= origen.saldo && cantidad >= 10000 && cuentas.includes(destinatario)) {
+    origen.saldo -= cantidad;
+    destinatario.saldo += cantidad;
+    registrarTransaccion(origen,destinatario,cantidad);
+    return `Transferencia exitosa. Saldo restante: $${origen.saldo}`;
+  } else {
+    return "Fondos insuficientes, cantidad no válida o destinatario no válido";
+  }
+}
+
 
 
 
@@ -361,29 +376,6 @@ function retirarDinero(cuenta, cantidad) {
   }
 }
 
-// Función para realizar una transferencia a otra cuenta
-function transferirCuenta(origen, destinatario, cantidad) {
-  if (
-    cantidad > 0 &&
-    cantidad <= origen.saldo &&
-    cantidad >= 10000 &&
-    cuentas.includes(destinatario)
-  ) {
-    origen.saldo -= cantidad;
-    destinatario.saldo += cantidad;
-    registrarTransaccion(
-      origen,
-      `Transferencia a ${destinatario.nombre} de $${cantidad}`
-    );
-    registrarTransaccion(
-      destinatario,
-      `Transferencia de ${origen.nombre} de $${cantidad}`
-    );
-    return `Transferencia exitosa. Saldo restante: $${origen.saldo}`;
-  } else {
-    return "Fondos insuficientes, cantidad no válida o destinatario no válido";
-  }
-}
 
 // Función para realizar una consignación de dinero
 function consignarDinero(cuenta, cantidad) {
@@ -397,9 +389,17 @@ function consignarDinero(cuenta, cantidad) {
 }
 
 // Función para registrar una transacción en el historial
-function registrarTransaccion(cuenta, descripcion) {
+function registrarTransaccion(origen,destinatario,cantidad) {
   const fecha = new Date().toLocaleString();
-  cuenta.historial.push({ fecha, descripcion });
+  let nuevaTransferencia = {
+    tipo:"transferencia",
+    origen: origen.numeroCuenta,
+    destinatario: destinatario.numeroCuenta,
+    cantidad,
+    fecha
+  }
+  origen.historial.push(nuevaTransferencia);
+  destinatario.historial.push(nuevaTransferencia);
 }
 
 // // Ejemplo de uso

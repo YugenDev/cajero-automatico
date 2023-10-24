@@ -309,6 +309,7 @@ hr {
   border: 1px solid var(--main_color);
   height: 3vw;
   display: flex;
+  position: relative;
 }
 .input-div img {
   height: 100%;
@@ -339,7 +340,7 @@ hr {
   align-items: flex-start;
 }
 .submit-form-div {
-  /* border: 1px solid red; */
+  border: 1px solid red;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -356,3 +357,41 @@ hr {
 button {
   cursor: pointer;
 }
+
+
+/* Modal de servicios */
+
+.services-modal{
+  outline: 6px double gold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.div__service{
+  display: flex;
+  width: 100%;
+}
+
+.services-modal h2, label{
+  color: var(--main_color);
+}
+.services-modal label{
+  position: absolute;
+  top: -30px;
+  /* font-size: 50px; */
+  z-index: 40;
+}
+
+.services-modal form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.services-modal .input-div{
+  width: 100%;
+}
+
+
+
