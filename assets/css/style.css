@@ -376,7 +376,7 @@ button {
   width: 100%;
 }
 
-.services-modal h2, label{
+.services-modal h2, .services-modal label,  .services-modal h3, .services-modal span, .services-modal h4{
   color: var(--main_color);
 }
 .services-modal label{
@@ -396,5 +396,81 @@ button {
   width: 100%;
 }
 
+.div__consignar, .div__transferir, .div__retirar{
+display: none;
+}
+.div__consultar-saldo{
+  height: 80%;
+  padding: 0 4vw;
+  flex-direction: column;
+}
+.mostrar-cuenta{
+  --b: 2px; /* thickness of the border */
+  --c: var(--main_color); /* color of the border */
+  --w: 15px; /* width of border */
+
+  border: var(--b) solid #0000; /* space for the border */
+  --_g: #0000 90deg, var(--c) 0;
+  --_p: var(--w) var(--w) border-box no-repeat;
+  background: conic-gradient(
+        from 90deg at top var(--b) left var(--b),
+        var(--_g)
+      )
+      0 0 / var(--_p),
+    conic-gradient(from 180deg at top var(--b) right var(--b), var(--_g)) 100% 0 /
+      var(--_p),
+    conic-gradient(from 0deg at bottom var(--b) left var(--b), var(--_g)) 0 100% /
+      var(--_p),
+    conic-gradient(from -90deg at bottom var(--b) right var(--b), var(--_g))
+      100% 100% / var(--_p);
 
 
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 20%;
+      padding: 1vw;
+      
+}
+
+.mostrar-cuenta h4{
+  width: 50%;
+  font-weight: 600;
+}
+
+.mostrar-saldo{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.contenedor-historial{
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid black;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.resumen-transaccion{
+  width: 100%;
+  display: flex;
+}
+.resumen-transaccion div{
+  height: 80px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding-left: 1vw;
+}
+
+.contenedor-historial article:nth-child(odd){
+  background-color: rgba(0, 0, 0, 0.75);
+}
+.contenedor-historial article:nth-child(even){
+  background-color: rgba(0, 0, 0, 0.8);
+}
