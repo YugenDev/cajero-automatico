@@ -384,7 +384,7 @@ function consignarDinero(cuenta, cantidad) {
     registrarTransaccion(cuenta, `Consignación de $${cantidad}`);
     return `Consignaste $${cantidad}. Saldo restante: $${cuenta.saldo}`;
   } else {
-    return "Cantidad no válida o la consignación es menor de $10,000";
+    return alert("No puedes consignar menos de $10,000");
   }
 }
 
@@ -402,29 +402,4 @@ function registrarTransaccion(origen,destinatario,cantidad) {
   destinatario.historial.push(nuevaTransferencia);
 }
 
-// // Ejemplo de uso
-// function ejemploDeUso() {
-//   const resultadoCreacion1 = crearCuenta("Usuario1", 100000, "contraseña1");
-//   const resultadoCreacion2 = crearCuenta("Usuario2", 100000, "contraseña2");
 
-//   console.log(resultadoCreacion1);
-//   console.log(resultadoCreacion2);
-
-//   const usuarioActual = iniciarSesion("Usuario1", "contraseña1");
-
-//   if (usuarioActual) {
-//     console.log("Inicio de sesión exitoso.");
-//     console.log(consultarSaldo(usuarioActual));
-//     console.log(retirarDinero(usuarioActual, 20000));
-//     console.log(transferirCuenta(usuarioActual, cuentas[1], 30000));
-//     console.log(consultarSaldo(usuarioActual));
-//     console.log(consultarSaldo(cuentas[1]));
-//     console.log(consignarDinero(usuarioActual, 15000));
-//     console.log(consultarSaldo(usuarioActual));
-//     console.log(usuarioActual.historial);
-//   } else {
-//     console.log("Inicio de sesión fallido.");
-//   }
-// }
-
-// ejemploDeUso();
