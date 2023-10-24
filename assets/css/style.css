@@ -236,6 +236,12 @@ hr {
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
 }
+.service-card button{
+  transition: box-shadow 0.7s ease;
+}
+.service-card button:hover{
+  box-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white;
+}
 .img-card {
   width: 10vw;
 }
