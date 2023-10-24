@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const consultarSaldoBtn = document.querySelector('.consultarSaldoBtn');
   const transferirBtn = document.querySelector('.transferirBtn');
   const consignarBtn = document.querySelector('.consignarBtn');
-
+  const retirarBtn = document.querySelector('.retirarBtn')
 
   // cerrar-abrir-intercambiar-reiniciar ambos formularios
   modalBg.addEventListener("click", cerrarModal);
@@ -43,7 +43,12 @@ document.addEventListener("DOMContentLoaded", function () {
   logInForm.addEventListener("submit", envioInicioSesion);
   signOutButton.addEventListener("click", envioCerrarSesion);
   
-
+  
+  // Gestión de servicios
+  consultarSaldoBtn.addEventListener("click", consultarSaldo);
+  transferirBtn.addEventListener("click", transferirCuenta);
+  consignarBtn.addEventListener("click", consignarDinero);
+  retirarBtn.addEventListener("click", retirarDinero);
 
 });
 
