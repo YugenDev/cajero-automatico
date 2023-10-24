@@ -84,6 +84,8 @@ button {
 
 .main-menu {
   display: flex;
+  position: absolute;
+  right: 46%;
   align-items: end;
   gap: 2vw;
 }
@@ -97,7 +99,7 @@ button {
   border-bottom: 0.5px solid white;
   font-weight: 400;
 }
-.main-menu a:nth-child(2) {
+.main-menu a/*:nth-child(2)*/ {
   font-size: 15px;
   opacity: 1;
   border-bottom: 0.5px solid white;
@@ -250,6 +252,7 @@ hr {
 }
 .service-card p {
   opacity: 0.5;
+  text-align: justify;
 }
 
 /* Modales */

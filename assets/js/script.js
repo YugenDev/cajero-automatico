@@ -74,12 +74,8 @@ var cuentasDePrueba = [
 
 
 // Variables globales
-var estaLoggeado = true;
-var usuarioActual = {nombre: "anfevasa",
-numeroCuenta: 12345678,
-saldo: 10000000,
-contraseña: "123",
-historial: []};
+var estaLoggeado = false;
+var usuarioActual = {};
 const cuentas = [...cuentasDePrueba];
 let intentosFallidos = 0;
 
@@ -183,7 +179,7 @@ function crearCuenta(usuario,  saldoInicial,  contraseña,  confirmacionContrase
   iniciarSesion(usuario,contraseña);
   visualWelcome();
   estaLoggeado=true;
-  return "Cuenta creada exitosamente.";
+  return `Cuenta creada exitosamente.\nTu número de cuenta es el N° ${nuevaCuenta.numeroCuenta}`;
 }
 
 function iniciarSesion(usuario, contraseña) {
@@ -330,7 +326,6 @@ function envioInicioSesion(e) {
   if(iniciarSesion(usuarioInput,contraseñaInput)){    
     visualWelcome();
     estaLoggeado=true;
-    console.log("Queda log: "+estaLoggeado);
   }
   
 }
@@ -347,7 +342,6 @@ function envioCerrarSesion() {
 }
 
 function visualWelcome() {
-    console.log(estaLoggeado);
     const welcomeUser = document.querySelector(".welcome");    
     const logInOutDiv = document.querySelector(".log-in-out");
     const signOutSpan = document.querySelector(".sign-out");
@@ -535,11 +529,10 @@ function consignarDinero(cantidad) {
 // Transferencia
 function transferirCuenta(numeroCuentaDestino, cantidad) {
   const destinatario = cuentas.find((c)=> c.numeroCuenta === numeroCuentaDestino)
-  console.log(destinatario);
   if (destinatario!==undefined && cantidad > 0 && cantidad <= usuarioActual.saldo && cantidad >= 10000 ) {
     usuarioActual.saldo -= cantidad;
     destinatario.saldo += cantidad;
-    registrarTransaccion(usuarioActual,destinatario,cantidad);
+    registrarTransaccion(usuarioActual,destinatario,cantidad,"Transferencia");
     return true;
   } else {
     alert("Fondos insuficientes, cantidad no válida o destinatario no válido");
@@ -549,15 +542,15 @@ function transferirCuenta(numeroCuentaDestino, cantidad) {
 // Función para registrar una transacción en el historial
 function registrarTransaccion(origen,destinatario,cantidad,tipo) {
   const fecha = new Date().toLocaleString();
-  let nuevaTransferencia = {
+  let nuevaTransacción = {
     tipo,
     origen: origen?.numeroCuenta,
-    destinatario: destinatario?.numeroCuenta,
+    destinatario: destinatario.numeroCuenta,
     cantidad,
     fecha
   }
-  origen?.historial.push(nuevaTransferencia);
-  destinatario?.historial.push(nuevaTransferencia);
+  origen?.historial.push(nuevaTransacción);
+  destinatario.historial.push(nuevaTransacción);
 }
 
 
